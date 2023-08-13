@@ -13,6 +13,7 @@ import { CreateUserDTO } from './dto/create-user.dto';
 import { User } from './user.entity';
 import {
   ApiCreatedResponse,
+  ApiNotFoundResponse,
   ApiOkResponse,
   ApiQuery,
   ApiTags,
@@ -41,12 +42,14 @@ export class UserController {
   }
 
   //get one user
+  @ApiNotFoundResponse()
   @ApiOkResponse({ type: User })
   @Get('/:userId')
   public async getUser(@Param('userId') userId: number) {
     return await this.userService.getUser(userId);
   }
 
+  @ApiNotFoundResponse()
   @Patch('/edit/:userId')
   public async editUser(
     @Body() createUserDto: CreateUserDTO,
