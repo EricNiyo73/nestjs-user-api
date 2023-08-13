@@ -15,14 +15,22 @@ export class UserService {
     return await this.userRepository.save(createUserDto);
   }
 
-  public async getUsers(): Promise<User[]> {
+  public async getUsers(firstName?: string): Promise<User[]> {
+    if (firstName) {
+      return this.userRepository.find({ where: { firstName } });
+    }
     return await this.userRepository.find();
   }
 
   public async getUser(userId: number): Promise<User> {
-    return await this.userRepository.findOne({
+    //chech in database
+    const user = await this.userRepository.findOne({
       where: { id: userId },
     });
+    if (!user) {
+      throw new NotFoundException();
+    }
+    return user;
   }
 
   public async editUser(
