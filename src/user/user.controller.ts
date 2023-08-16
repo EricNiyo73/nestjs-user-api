@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Query,
+  ValidationPipe,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDTO } from './dto/create-user.dto';
@@ -27,7 +28,9 @@ export class UserController {
 
   @ApiCreatedResponse({ type: User, description: 'you can post a user' })
   @Post('create')
-  public async createUser(@Body() createUserDto: CreateUserDTO): Promise<User> {
+  public async createUser(
+    @Body(new ValidationPipe()) createUserDto: CreateUserDTO,
+  ): Promise<User> {
     return await this.userService.createUser(createUserDto);
   }
 
